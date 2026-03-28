@@ -22,7 +22,9 @@ EXAMPLES:
   lkf patch apply --set aufs --source-dir /path/to/linux
   lkf patch apply --file my.patch --source-dir /path/to/linux
   lkf patch list
-  lkf patch fetch --set rt --version 6.12
+  lkf patch fetch --version 6.6.130              # fetch all sets
+  lkf patch fetch --version 6.6.130 --set rt     # fetch RT only
+  lkf patch fetch --version 6.6.130 --set cachyos --dir /tmp/patches
 EOF
 }
 
@@ -80,22 +82,31 @@ patch_cmd_apply() {
 }
 
 patch_cmd_fetch() {
-    local set_name="" version=""
+    local set_name="all" version="" dir=""
     while [[ $# -gt 0 ]]; do
         case "$1" in
             --set)     set_name="$2"; shift 2 ;;
             --version) version="$2"; shift 2 ;;
+            --dir)     dir="$2"; shift 2 ;;
+            --help|-h)
+                echo "Usage: lkf patch fetch --version <kver> [--set <set>] [--dir <path>]"
+                echo "  --version  Kernel version, e.g. 6.6.30 (required)"
+                echo "  --set      Patch set: aufs, rt, xanmod, cachyos, all [default: all]"
+                echo "  --dir      Download directory [default: \${LKF_ROOT}/patches]"
+                return 0 ;;
             *) lkf_die "Unknown option: $1" ;;
         esac
     done
-    [[ -z "${set_name}" ]] && lkf_die "--set required"
-    lkf_warn "Patch fetching for '${set_name}' is not yet automated. See:"
-    case "${set_name}" in
-        aufs)    echo "  https://github.com/sfjro/aufs-standalone" ;;
-        rt)      echo "  https://cdn.kernel.org/pub/linux/kernel/projects/rt/" ;;
-        cachyos) echo "  https://github.com/CachyOS/kernel-patches" ;;
-        xanmod)  echo "  https://gitlab.com/xanmod/linux" ;;
-    esac
+
+    [[ -z "${version}" ]] && lkf_die "--version is required (e.g. lkf patch fetch --version 6.6.30)"
+
+    local fetch_script="${LKF_ROOT}/patches/fetch.sh"
+    [[ -f "${fetch_script}" ]] || lkf_die "fetch script not found: ${fetch_script}"
+
+    local fetch_args=(--version "${version}" --set "${set_name}")
+    [[ -n "${dir}" ]] && fetch_args+=(--dir "${dir}")
+
+    bash "${fetch_script}" "${fetch_args[@]}"
 }
 
 # ── Internal helpers (called from build pipeline) ─────────────────────────────
