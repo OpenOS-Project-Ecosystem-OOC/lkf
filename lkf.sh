@@ -40,6 +40,7 @@ USAGE: lkf <command> [options]
 
 COMMANDS:
   build       Fetch, configure, patch, and compile a kernel
+  remix       Build a kernel from a declarative remix.toml descriptor
   config      Manage kernel .config files (generate, merge, validate, convert)
   patch       Apply or manage patch sets
   initrd      Build initramfs/initrd images
@@ -49,7 +50,7 @@ COMMANDS:
   extract     Extract vmlinux from vmlinuz/EFI/boot.img
   dkms        Manage DKMS modules alongside a kernel build
   profile     List, create, or switch named build profiles
-  ci          Emit CI workflow files (GitHub Actions)
+  ci          Emit CI workflow files (GitHub Actions, GitLab CI, Forgejo)
   info        Show detected host/target environment
 
 Run 'lkf <command> --help' for command-specific options.
@@ -88,6 +89,7 @@ main() {
 
     case "${cmd}" in
         build)   cmd_build "$@" ;;
+        remix)   cmd_remix "$@" ;;
         config)  cmd_config "$@" ;;
         patch)   cmd_patch "$@" ;;
         initrd)  cmd_initrd "$@" ;;
@@ -106,6 +108,7 @@ main() {
 
 # Lazy-load command modules
 cmd_build()   { source "${LKF_ROOT}/core/build.sh";   build_main "$@"; }
+cmd_remix()   { source "${LKF_ROOT}/core/remix.sh";   remix_main "$@"; }
 cmd_config()  { source "${LKF_ROOT}/core/config.sh";  config_main "$@"; }
 cmd_patch()   { source "${LKF_ROOT}/core/patch.sh";   patch_main "$@"; }
 cmd_initrd()  { source "${LKF_ROOT}/core/initrd.sh";  initrd_main "$@"; }

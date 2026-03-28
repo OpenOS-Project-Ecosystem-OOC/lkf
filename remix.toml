@@ -1,0 +1,31 @@
+# remix.toml — example kernel remix descriptor
+# Run: lkf remix --dry-run
+
+[remix]
+name        = "example-desktop"
+version     = "6.12"
+flavor      = "mainline"
+arch        = "x86_64"
+description = "Example desktop kernel built with GCC"
+
+[build]
+llvm         = false
+lto          = "none"
+threads      = 0           # 0 = nproc
+config       = "defconfig"
+target       = "desktop"
+output       = "deb"
+localversion = "-lkf"
+
+[patches]
+sets  = []
+files = []
+
+[cross]
+prefix = ""
+
+[output]
+build_dir    = "build"
+download_dir = "downloads"
+clean_after  = false
+remove_after = false
