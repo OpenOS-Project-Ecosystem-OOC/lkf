@@ -78,6 +78,8 @@ detect_pkg_manager() {
             for pm in apt dnf pacman zypper apk xbps-install emerge; do
                 command -v "${pm}" &>/dev/null && echo "${pm}" && return
             done
+            # nix-env presence → nix
+            command -v nix-env &>/dev/null && echo "nix" && return
             echo "unknown"
             ;;
     esac

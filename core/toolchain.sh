@@ -171,6 +171,22 @@ toolchain_install_deps() {
                 app-arch/cpio app-arch/xz-utils app-arch/bzip2 dev-vcs/git \
                 dev-lang/perl dev-lang/python
             ;;
+        nix)
+            # On NixOS / with Nix, prefer nix-shell with the provided shell.nix.
+            # If already inside a nix-shell (IN_NIX_SHELL is set), deps are present.
+            if [[ -n "${IN_NIX_SHELL:-}" ]]; then
+                lkf_info "Already inside nix-shell — build dependencies are available."
+            else
+                local shell_nix="${LKF_ROOT}/nix/shell.nix"
+                if [[ -f "${shell_nix}" ]]; then
+                    lkf_info "NixOS detected. Re-entering via nix-shell ${shell_nix} ..."
+                    lkf_info "Run: nix-shell ${shell_nix} --run 'lkf ${LKF_ORIG_ARGS:-build}'"
+                else
+                    lkf_warn "nix/shell.nix not found. Install deps manually or run:"
+                    lkf_warn "  nix-shell -p gcc gnumake bison flex ncurses openssl elfutils bc lz4 zstd rsync cpio xz bzip2 git perl python3"
+                fi
+            fi
+            ;;
         *)
             lkf_warn "Unknown package manager '${pm}'. Install build deps manually."
             lkf_warn "Required: gcc/clang, make, bison, flex, libncurses-dev, libssl-dev,"

@@ -82,8 +82,28 @@ EXAMPLES:
 EOF
 }
 
+_lkf_nixos_check() {
+    # On NixOS, build tools are not on PATH outside a nix-shell.
+    # Warn early so the user gets a clear message instead of a cryptic
+    # "make: command not found" later.
+    local distro
+    distro=$(detect_distro 2>/dev/null || true)
+    if [[ "${distro}" == "nixos" ]] && \
+       [[ -z "${IN_NIX_SHELL:-}" ]] && \
+       [[ -z "${LKF_NIX_SHELL:-}" ]]; then
+        lkf_warn "NixOS detected but not running inside a nix-shell."
+        lkf_warn "Build tools may be missing. Enter the lkf environment first:"
+        lkf_warn "  nix-shell ${LKF_ROOT}/nix/shell.nix --run 'lkf $*'"
+        lkf_warn "  # or with flakes: nix develop ${LKF_ROOT}#"
+        lkf_warn "Set LKF_NIX_SHELL=1 to suppress this warning."
+    fi
+}
+
 main() {
     [[ $# -eq 0 ]] && { usage; exit 0; }
+
+    # NixOS guard — warn if build tools are likely missing
+    _lkf_nixos_check "$@"
 
     local cmd="$1"; shift
 
