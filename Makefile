@@ -57,6 +57,9 @@ check:
 	@bash tests/test_detect.sh
 	@bash tests/test_config.sh
 	@bash tests/test_integration.sh
+	@bash tests/test_tkg.sh
+	@bash tests/test_kbuild.sh
+	@bash tests/test_xm.sh
 	@echo "All tests passed."
 
 lint:

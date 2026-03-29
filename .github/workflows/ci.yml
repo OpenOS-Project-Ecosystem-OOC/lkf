@@ -53,3 +53,28 @@ jobs:
             source core/remix.sh
             remix_main --file remix.toml --dry-run
           '
+
+  tkg-fetch-validate:
+    name: tkg patch fetch (6.12)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install fetch dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends \
+            curl ca-certificates jq
+
+      - name: Fetch tkg patches for 6.12
+        run: bash patches/fetch.sh --version 6.12 --set tkg --output patches/tkg
+
+      - name: Verify at least one patch was fetched
+        run: |
+          count=$(find patches/tkg -name '*.patch' | wc -l)
+          echo "Fetched ${count} tkg patches"
+          [[ "${count}" -gt 0 ]] || { echo "No patches fetched"; exit 1; }
+
+      - name: Verify bore patch present
+        run: ls patches/tkg/*bore*.patch || { echo "bore patch missing"; exit 1; }
