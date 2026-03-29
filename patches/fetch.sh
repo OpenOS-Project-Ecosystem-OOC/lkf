@@ -70,6 +70,7 @@ download() {
 # Parse version components
 KMAJ="${KVER%%.*}"
 KMIN="${KVER#*.}"; KMIN="${KMIN%%.*}"
+# shellcheck disable=SC2034  # KPATCH used by fetch_tkg added in this session
 KPATCH="${KVER##*.}"
 
 # ── Fetch functions ───────────────────────────────────────────────────────────

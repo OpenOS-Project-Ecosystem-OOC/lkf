@@ -143,15 +143,9 @@ echo "-- --stop-after extract --"
 # Simulate the pipeline control logic from build_main
 _test_pipeline() {
     local stop_after="$1"
-    local reached_patch=0 reached_config=0
 
-    # Stage: extract (already done above — simulate it completing)
     [[ "${stop_after}" == "extract" ]] && { echo "stopped_at_extract"; return 0; }
-
-    reached_patch=1
-    [[ "${stop_after}" == "patch" ]] && { echo "stopped_at_patch"; return 0; }
-
-    reached_config=1
+    [[ "${stop_after}" == "patch"   ]] && { echo "stopped_at_patch";   return 0; }
     echo "reached_config"
 }
 

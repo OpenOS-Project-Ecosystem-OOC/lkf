@@ -151,6 +151,7 @@ extract_vmlinuz() {
     lkf_step "Probing compression format..."
     local tmp
     tmp=$(lkf_mktemp_dir)
+    # shellcheck disable=SC2064  # intentional: expand $tmp now, not at RETURN time
     trap "rm -rf ${tmp}" RETURN
 
     # Try each decompressor in order (gzip, bzip2, lzma, xz, lz4, zstd)

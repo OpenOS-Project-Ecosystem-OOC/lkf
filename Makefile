@@ -59,6 +59,19 @@ check:
 	@bash tests/test_integration.sh
 	@echo "All tests passed."
 
+lint:
+	@echo "Running ShellCheck..."
+	@command -v shellcheck >/dev/null 2>&1 || \
+		{ echo "shellcheck not found — install it or run: make lint-install"; exit 1; }
+	@find . -name '*.sh' | sort | xargs shellcheck --severity=warning --format=gcc
+	@echo "ShellCheck passed."
+
+lint-install:
+	@echo "Installing ShellCheck..."
+	@curl -fsSL https://github.com/koalaman/shellcheck/releases/download/stable/shellcheck-stable.linux.x86_64.tar.xz \
+		| tar -xJ --strip-components=1 -C /usr/local/bin shellcheck-stable/shellcheck
+	@echo "ShellCheck installed."
+
 clean:
 	rm -f tools/kdress/kdress tools/unzboot/unzboot
 	rm -rf build/ downloads/

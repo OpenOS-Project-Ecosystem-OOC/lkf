@@ -225,6 +225,7 @@ image_cmd_tar() {
 
     local staging
     staging=$(lkf_mktemp_dir)
+    # shellcheck disable=SC2064  # intentional: expand $staging now, not at EXIT time
     trap "rm -rf ${staging}" EXIT
 
     lkf_ensure_dir "${staging}/boot"

@@ -35,6 +35,7 @@ echo "=== test_config.sh ==="
 
 # Create a temp config file
 tmp_config=$(mktemp /tmp/lkf-test-config.XXXXXX)
+# shellcheck disable=SC2064  # intentional: expand $tmp_config now, not at EXIT time
 trap "rm -f ${tmp_config}" EXIT
 
 cat > "${tmp_config}" <<'EOF'

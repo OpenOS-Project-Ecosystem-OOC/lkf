@@ -189,7 +189,7 @@ build_main() {
 
 build_stage_download() {
     lkf_ensure_dir "${LKF_DOWNLOAD_DIR}"
-    local base_url tarball sig_url
+    local base_url tarball
 
     case "${LKF_FLAVOR}" in
         mainline|zen|rt|cachyos)

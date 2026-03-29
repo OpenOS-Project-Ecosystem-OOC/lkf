@@ -75,6 +75,7 @@ initrd_build_from_config() {
 
     local staging
     staging=$(lkf_mktemp_dir)
+    # shellcheck disable=SC2064  # intentional: expand $staging now, not at EXIT time
     trap "rm -rf ${staging}" EXIT
 
     lkf_step "Building initrd from config: ${config_file}"
@@ -86,14 +87,16 @@ initrd_build_from_config() {
             local dir="${BASH_REMATCH[1]}"
             lkf_ensure_dir "${staging}${dir}"
         elif [[ -f "${line}" ]]; then
-            local dest_dir="${staging}/$(dirname "${line}")"
+            local dest_dir
+            dest_dir="${staging}/$(dirname "${line}")"
             lkf_ensure_dir "${dest_dir}"
             cp "${line}" "${dest_dir}/"
             # Copy shared library dependencies
             if command -v ldd &>/dev/null; then
                 ldd "${line}" 2>/dev/null | grep -oP '/\S+\.so\S*' | while read -r lib; do
                     [[ -f "${lib}" ]] || continue
-                    local lib_dir="${staging}/$(dirname "${lib}")"
+                    local lib_dir
+                    lib_dir="${staging}/$(dirname "${lib}")"
                     lkf_ensure_dir "${lib_dir}"
                     cp -n "${lib}" "${lib_dir}/" 2>/dev/null || true
                 done
@@ -131,6 +134,7 @@ initrd_build_debootstrap() {
 
     local rootfs_dir
     rootfs_dir=$(lkf_mktemp_dir)
+    # shellcheck disable=SC2064  # intentional: expand $rootfs_dir now, not at EXIT time
     trap "rm -rf ${rootfs_dir}" EXIT
 
     lkf_step "Running debootstrap: suite=${suite}, arch=${arch}"

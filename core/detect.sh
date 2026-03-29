@@ -157,7 +157,7 @@ detect_default_output_format() {
 # ── Print summary ─────────────────────────────────────────────────────────────
 
 detect_print_info() {
-    local host_arch distro pkg_manager cc llvm_ver cross_prefix output_fmt
+    local host_arch distro pkg_manager cc llvm_ver output_fmt
     host_arch=$(detect_host_arch)
     distro=$(detect_distro)
     pkg_manager=$(detect_pkg_manager)

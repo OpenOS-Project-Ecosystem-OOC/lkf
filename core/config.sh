@@ -57,6 +57,7 @@ config_apply() {
     local target_profile="$3"
     local arch="$4"
     local cross_prefix="$5"
+    # shellcheck disable=SC2034  # cc/llvm/lto reserved for future config fragment selection
     local cc="$6"
     local llvm="$7"
     local lto="$8"
@@ -192,7 +193,7 @@ config_cmd_generate() {
     [[ -z "${arch}" ]] && arch=$(detect_host_arch)
     local kernel_arch
     kernel_arch=$(arch_to_kernel_arch "${arch}")
-    lkf_info "Generating config: source=${source}, arch=${kernel_arch}"
+    lkf_info "Generating config: source=${source}, arch=${kernel_arch}, output=${output}${cross:+, cross=${cross}}"
     # Requires a source dir - delegate to build pipeline
     lkf_warn "Run 'lkf build --config ${source}' to generate config within a build."
 }

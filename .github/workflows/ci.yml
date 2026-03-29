@@ -35,14 +35,8 @@ jobs:
 
       - name: Lint shell scripts
         run: |
-          find . -name '*.sh' \
-            ! -path './patches/fetch.sh' \
-            | xargs shellcheck \
-                --severity=error \
-                --exclude=SC1090,SC1091,SC2034,SC2154,SC2086 \
-            || true
-          # Non-fatal: surfacing warnings without blocking merges
-          exit 0
+          find . -name '*.sh' | sort | \
+            xargs shellcheck --severity=warning --format=gcc
 
   remix-dry-run:
     name: lkf remix --dry-run
