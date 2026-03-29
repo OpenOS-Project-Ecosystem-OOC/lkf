@@ -284,7 +284,7 @@ build_stage_patch() {
         patch_apply_set "${LKF_SOURCE_DIR}" "${LKF_PATCH_SET}" "${LKF_KERNEL_VERSION}"
     fi
 
-    for p in "${LKF_PATCHES[@]:-}"; do
+    for p in "${LKF_PATCHES[@]+"${LKF_PATCHES[@]}"}"; do
         [[ -n "${p}" ]] && patch_apply_file "${LKF_SOURCE_DIR}" "${p}"
     done
 }

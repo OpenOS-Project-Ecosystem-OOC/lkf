@@ -221,6 +221,7 @@ patch_apply_set_tkg() {
             ;;
         muqss|upds)
             lkf_warn "tkg: ${cpusched} scheduler not available for kernel >= 6.0; falling back to eevdf"
+            # Apply eevdf directly rather than re-reading TKG_CPUSCHED (which is still muqss)
             _tkg_apply "0003-glitched-eevdf-additions.patch"
             ;;
     esac
