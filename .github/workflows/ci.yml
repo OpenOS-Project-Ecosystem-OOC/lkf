@@ -13,6 +13,7 @@ jobs:
     permissions:
       contents: read
       actions: read
+      packages: read  # Added permission for packages
 
     steps:
       - uses: actions/checkout@v6
