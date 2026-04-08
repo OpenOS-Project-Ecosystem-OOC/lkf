@@ -23,12 +23,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
             bash coreutils tar xz-utils curl ca-certificates make gcc g++ \
-            binutils file
-
-      - name: Install additional dependencies for tests
-        run: |
-          sudo apt-get install -y --no-install-recommends \
-            pkg-config libssl-dev
+            binutils file pkg-config libssl-dev
 
       - name: Run tests
         run: make check
