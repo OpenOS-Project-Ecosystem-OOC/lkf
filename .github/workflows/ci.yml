@@ -23,7 +23,8 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
             bash coreutils tar xz-utils curl ca-certificates make gcc g++ \
-            binutils file pkg-config libssl-dev python3 python3-pip  # Added Python dependencies
+            binutils file pkg-config libssl-dev python3 python3-pip \
+            python3-setuptools python3-wheel  # Added missing Python dependencies
 
       - name: Run tests
         run: make check
