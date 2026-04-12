@@ -26,6 +26,9 @@ jobs:
             binutils file pkg-config libssl-dev python3 python3-pip \
             python3-setuptools python3-wheel python3-venv  # Added missing Python dependencies
 
+      - name: Ensure make is installed
+        run: sudo apt-get install -y make  # Ensure make is installed
+
       - name: Run tests
         run: make check
 
