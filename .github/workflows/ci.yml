@@ -25,7 +25,7 @@ jobs:
             bash coreutils tar xz-utils curl ca-certificates make gcc g++ \
             binutils file pkg-config libssl-dev python3 python3-pip \
             python3-setuptools python3-wheel python3-venv \
-            python3-dev  # Added missing Python development package
+            python3-dev libffi-dev libgmp-dev  # Added missing dependencies
 
       - name: Ensure make is installed
         run: sudo apt-get install -y make  # Ensure make is installed
