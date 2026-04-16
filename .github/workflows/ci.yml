@@ -10,6 +10,10 @@ jobs:
   test:
     name: Test suite
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+      packages: read  # Added permission for packages
 
     steps:
       - uses: actions/checkout@v6
@@ -18,7 +22,14 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends \
-            bash coreutils tar xz-utils curl ca-certificates
+            bash coreutils tar xz-utils curl ca-certificates make gcc g++ \
+            binutils file pkg-config libssl-dev python3 python3-pip \
+            python3-setuptools python3-wheel python3-venv \
+            python3-dev libffi-dev libgmp-dev libbz2-dev liblzma-dev \
+            libcap-dev  # Added missing dependencies
+
+      - name: Ensure make is installed
+        run: sudo apt-get install -y make  # Ensure make is installed
 
       - name: Run tests
         run: make check
